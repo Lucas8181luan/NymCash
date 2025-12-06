@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Contas - NymCash</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>NymCash</h2>
+        <ul>
+            <li><a href="/">Início</a></li>
+            <li><a href="/registrar-transacao">Registrar transação</a></li>
+            <li><a href="/extrato">Extrato</a></li>
+            <li><a href="/minhas-contas" class="active">Minhas Contas</a></li>
+            <li><a href="/cartao-de-credito">Cartão de Crédito</a></li>
+            <li><a href="/meu-planejador">Meu Planejador</a></li>
+            <li><a href="/meu-clube">Meu Clube</a></li>
+        </ul>
+    </div>
+    <div class="main">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div style="margin-bottom:20px;">
+            {% for category, message in messages %}
+            <div style="padding:10px;border-radius:5px;margin-bottom:8px;background:{% if category=='success' %}#d4efdf{% elif category=='danger' %}#f9ebea{% elif category=='warning' %}#fcf3cf{% else %}#f5f6fa{% endif %};color:#222;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <div class="card">
+            <h3>Minhas Contas</h3>
+            <form method="post" action="/minhas-contas">
+                <label>Nome da conta:</label>
+                <input type="text" name="nome_conta" required><br><br>
+                <label>Saldo inicial:</label>
+                <input type="number" step="0.01" name="saldo_inicial" required><br><br>
+                <button type="submit" class="btn">Adicionar Conta</button>
+            </form>
+        </div>
+        <div class="performance">
+            <h3>Contas cadastradas</h3>
+            <form method="get" action="/minhas-contas" style="margin-bottom:20px;">
+                <label for="nome">Nome:</label>
+                <input type="text" name="nome" id="nome" value="{{ nome }}" placeholder="Buscar nome">
+                <label for="saldo_min">Saldo mínimo:</label>
+                <input type="number" step="0.01" name="saldo_min" id="saldo_min" value="{{ saldo_min }}" placeholder="0.00">
+                <label for="saldo_max">Saldo máximo:</label>
+                <input type="number" step="0.01" name="saldo_max" id="saldo_max" value="{{ saldo_max }}" placeholder="0.00">
+                <button type="submit" class="btn">Filtrar</button>
+            </form>
+            <table>
+                <tr><th>Nome</th><th>Saldo</th></tr>
+                {% for c in contas %}
+                <tr>
+                    <td>{{ c.nome }}</td>
+                    <td>R$ {{ '%.2f'|format(c.saldo) }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>

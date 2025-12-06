@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Clube - NymCash</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>NymCash</h2>
+        <ul>
+            <li><a href="/">Início</a></li>
+            <li><a href="/registrar-transacao">Registrar transação</a></li>
+            <li><a href="/extrato">Extrato</a></li>
+            <li><a href="/minhas-contas">Minhas Contas</a></li>
+            <li><a href="/cartao-de-credito">Cartão de Crédito</a></li>
+            <li><a href="/meu-planejador">Meu Planejador</a></li>
+            <li><a href="/meu-clube" class="active">Meu Clube</a></li>
+        </ul>
+    </div>
+    <div class="main">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div style="margin-bottom:20px;">
+            {% for category, message in messages %}
+            <div style="padding:10px;border-radius:5px;margin-bottom:8px;background:{% if category=='success' %}#d4efdf{% elif category=='danger' %}#f9ebea{% elif category=='warning' %}#fcf3cf{% else %}#f5f6fa{% endif %};color:#222;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <div class="card">
+            <h3>Meu Clube</h3>
+            <form method="post" action="/meu-clube">
+                <label>Nome do clube:</label>
+                <input type="text" name="nome_clube" required><br><br>
+                <label>Descrição:</label>
+                <input type="text" name="descricao_clube" required><br><br>
+                <button type="submit" class="btn">Criar Clube</button>
+            </form>
+        </div>
+        <div class="performance">
+            <h3>Clubes cadastrados</h3>
+            <form method="get" action="/meu-clube" style="margin-bottom:20px;">
+                <label for="nome">Nome:</label>
+                <input type="text" name="nome" id="nome" value="{{ nome }}" placeholder="Buscar nome">
+                <label for="descricao">Descrição:</label>
+                <input type="text" name="descricao" id="descricao" value="{{ descricao }}" placeholder="Buscar descrição">
+                <button type="submit" class="btn">Filtrar</button>
+            </form>
+            <table>
+                <tr><th>Nome</th><th>Descrição</th></tr>
+                {% for c in clubes %}
+                <tr>
+                    <td>{{ c.nome }}</td>
+                    <td>{{ c.descricao }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>

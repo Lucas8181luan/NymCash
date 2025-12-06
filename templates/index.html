@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NymCash - Início</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>NymCash</h2>
+        <ul>
+            <li><a href="/" class="active">Início</a></li>
+            <li><a href="/registrar-transacao">Registrar transação</a></li>
+            <li><a href="/extrato">Extrato</a></li>
+            <li><a href="/minhas-contas">Minhas Contas</a></li>
+            <li><a href="/cartao-de-credito">Cartão de Crédito</a></li>
+            <li><a href="/meu-planejador">Meu Planejador</a></li>
+            <li><a href="/meu-clube">Meu Clube</a></li>
+        </ul>
+    </div>
+    <div class="main">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div style="margin-bottom:20px;">
+            {% for category, message in messages %}
+            <div style="padding:10px;border-radius:5px;margin-bottom:8px;background:{% if category=='success' %}#d4efdf{% elif category=='danger' %}#f9ebea{% elif category=='warning' %}#fcf3cf{% else %}#f5f6fa{% endif %};color:#222;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <div class="card">
+            <h3>Saldo atual</h3>
+            <div class="values">
+                <div>
+                    <div class="label">Ganhos do mês</div>
+                    <div class="value">{{ ganhos_mes|default('0,00') }}</div>
+                </div>
+                <div>
+                    <div class="label">Gastos do mês</div>
+                    <div class="value">{{ gastos_mes|default('0,00') }}</div>
+                </div>
+            </div>
+            <div style="margin-top:20px; text-align:right;">
+                <span style="color:#fff;">Saldo total: R$ {{ saldo_atual|default('0,00') }}</span>
+            </div>
+        </div>
+        <div class="performance">
+            <h3>Desempenho</h3>
+            <div class="result">{{ resultado|default('0,00') }}</div>
+            <div class="details">Entradas <span style="color:#2ecc71;">{{ ganhos_mes|default('0,00') }}</span> &nbsp; Saídas <span style="color:#e74c3c;">{{ gastos_mes|default('0,00') }}</span></div>
+        </div>
+        <div class="orcamento">
+            <h3>Orçamento <span class="add">Adicionar orçamento</span></h3>
+            <div style="font-size:2rem; color:#2ecc71;">Em breve</div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - NymCash</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="main" style="max-width:400px;margin:80px auto;">
+        <div class="card">
+            <h3>Login</h3>
+            <form method="post" action="/login">
+                <label>Usuário:</label>
+                <input type="text" name="usuario" required><br><br>
+                <label>Senha:</label>
+                <input type="password" name="senha" required><br><br>
+                <button type="submit" class="btn">Entrar</button>
+            </form>
+        </div>
+        <div style="margin-top:20px;text-align:center;">
+            <span style="color:#888;">Usuário padrão: <b>admin</b> | Senha: <b>1234</b></span>
+        </div>
+    </div>
+</body>
+</html>

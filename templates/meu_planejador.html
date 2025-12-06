@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Planejador - NymCash</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>NymCash</h2>
+        <ul>
+            <li><a href="/">Início</a></li>
+            <li><a href="/registrar-transacao">Registrar transação</a></li>
+            <li><a href="/extrato">Extrato</a></li>
+            <li><a href="/minhas-contas">Minhas Contas</a></li>
+            <li><a href="/cartao-de-credito">Cartão de Crédito</a></li>
+            <li><a href="/meu-planejador" class="active">Meu Planejador</a></li>
+            <li><a href="/meu-clube">Meu Clube</a></li>
+        </ul>
+    </div>
+    <div class="main">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div style="margin-bottom:20px;">
+            {% for category, message in messages %}
+            <div style="padding:10px;border-radius:5px;margin-bottom:8px;background:{% if category=='success' %}#d4efdf{% elif category=='danger' %}#f9ebea{% elif category=='warning' %}#fcf3cf{% else %}#f5f6fa{% endif %};color:#222;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <div class="card">
+            <h3>Planejamento Financeiro</h3>
+            <form method="post" action="/meu-planejador">
+                <label>Meta:</label>
+                <input type="text" name="meta" required><br><br>
+                <label>Valor desejado:</label>
+                <input type="number" step="0.01" name="valor_meta" required><br><br>
+                <button type="submit" class="btn">Adicionar Meta</button>
+            </form>
+        </div>
+        <div class="performance">
+            <h3>Metas cadastradas</h3>
+            <form method="get" action="/meu-planejador" style="margin-bottom:20px;">
+                <label for="meta">Meta:</label>
+                <input type="text" name="meta" id="meta" value="{{ meta }}" placeholder="Buscar meta">
+                <label for="valor_min">Valor mínimo:</label>
+                <input type="number" step="0.01" name="valor_min" id="valor_min" value="{{ valor_min }}" placeholder="0.00">
+                <label for="valor_max">Valor máximo:</label>
+                <input type="number" step="0.01" name="valor_max" id="valor_max" value="{{ valor_max }}" placeholder="0.00">
+                <button type="submit" class="btn">Filtrar</button>
+            </form>
+            <table>
+                <tr><th>Meta</th><th>Valor</th></tr>
+                {% for m in metas %}
+                <tr>
+                    <td>{{ m.meta }}</td>
+                    <td>R$ {{ '%.2f'|format(m.valor) }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>

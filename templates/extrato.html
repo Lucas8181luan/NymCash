@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extrato - NymCash</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>NymCash</h2>
+        <ul>
+            <li><a href="/">Início</a></li>
+            <li><a href="/registrar-transacao">Registrar transação</a></li>
+            <li><a href="/extrato" class="active">Extrato</a></li>
+            <li><a href="/minhas-contas">Minhas Contas</a></li>
+            <li><a href="/cartao-de-credito">Cartão de Crédito</a></li>
+            <li><a href="/meu-planejador">Meu Planejador</a></li>
+            <li><a href="/meu-clube">Meu Clube</a></li>
+        </ul>
+    </div>
+    <div class="main">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div style="margin-bottom:20px;">
+            {% for category, message in messages %}
+            <div style="padding:10px;border-radius:5px;margin-bottom:8px;background:{% if category=='success' %}#d4efdf{% elif category=='danger' %}#f9ebea{% elif category=='warning' %}#fcf3cf{% else %}#f5f6fa{% endif %};color:#222;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <div class="card">
+            <h3>Extrato de movimentações</h3>
+            <form method="get" action="/extrato" style="margin-bottom:20px;">
+                <label for="tipo">Tipo:</label>
+                <select name="tipo" id="tipo">
+                    <option value="">Todos</option>
+                    <option value="entrada" {% if tipo=='entrada' %}selected{% endif %}>Entrada</option>
+                    <option value="saida" {% if tipo=='saida' %}selected{% endif %}>Saída</option>
+                </select>
+                <label for="descricao">Descrição:</label>
+                <input type="text" name="descricao" id="descricao" value="{{ descricao }}" placeholder="Buscar descrição">
+                <label for="data">Data:</label>
+                <input type="text" name="data" id="data" value="{{ data }}" placeholder="dd/mm/aaaa">
+                <button type="submit" class="btn">Filtrar</button>
+            </form>
+            <table>
+                <tr><th>Data</th><th>Descrição</th><th>Tipo</th><th>Valor</th></tr>
+                {% for t in transacoes %}
+                <tr>
+                    <td>{{ t.data }}</td>
+                    <td>{{ t.descricao }}</td>
+                    <td>{{ 'Entrada' if t.tipo == 'entrada' else 'Saída' }}</td>
+                    <td style="color:{% if t.tipo == 'entrada' %}#2ecc71{% else %}#e74c3c{% endif %};">
+                        {% if t.tipo == 'entrada' %}+{% else %}-{% endif %}R$ {{ '%.2f'|format(t.valor) }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="performance">
+            <h3>Resumo do mês</h3>
+            <div class="result">R$ {{ resultado|default('0,00') }}</div>
+            <div class="details">Entradas: R$ {{ ganhos_mes|default('0,00') }} &nbsp; Saídas: R$ {{ gastos_mes|default('0,00') }}</div>
+        </div>
+    </div>
+</body>
+</html>
