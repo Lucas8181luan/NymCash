@@ -1,1 +1,1 @@
-web: python NymCash.py
+web: python SITE.py
